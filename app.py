@@ -13,7 +13,7 @@ def index():
 
 @app.route('/nprand')
 def nprand():
-  print np.random.rand()
+  return str(np.random.rand())
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
