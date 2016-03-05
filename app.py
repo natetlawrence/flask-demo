@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+import numpy
 
 app = Flask(__name__)
 
@@ -10,5 +11,9 @@ def main():
 def index():
   return render_template('index.html')
 
+@app.route('/nprand')
+def nprand():
+  print np.random.rand()
+
 if __name__ == '__main__':
-  app.run(port=33507)
+  app.run(host='0.0.0.0')
