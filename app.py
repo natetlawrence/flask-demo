@@ -18,6 +18,10 @@ def index():
 def nprand():
   return str(np.random.rand())
 
+@app.route('/index_lulu')
+def index_lulu():
+    return render_template('userinfo_lulu.html')
+
 @app.route('/tickerplot')
 def tickerplot():
   symbol = 'FB'
