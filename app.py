@@ -42,13 +42,13 @@ def tickersubmit():
     return render_template('tickerplot_input.html')
   else:
     app.vars['tickersymbol'] = request.form['ticker_name']
-    #return redirect('/tickerplot')
-    return app.vars['tickersymbol']
+    return redirect('/tickerplot')
+    #return app.vars['tickersymbol']
 
 @app.route('/tickerplot')
 def tickerplot():
-  #symbol = app.vars['tickersymbol']
-  symbol = 'FB'
+  symbol = app.vars['tickersymbol']
+  # symbol = 'FB'
   field = u'Open'
   r = requests.get('https://www.quandl.com/api/v3/datasets/WIKI/{}.json'.format(symbol))
   rjson = r.json()
