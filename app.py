@@ -42,9 +42,6 @@ def tickersubmit():
     return render_template('tickerplot_input.html')
   else:
     app.vars['tickersymbol'] = request.form['ticker_name']
-    f = open('Tickers.txt','a')
-    f.write('Ticker Name: %s\n'%(app.vars['tickersymbol']))
-    f.close()
     return redirect('/tickerplot')
 
 @app.route('/tickerplot')
