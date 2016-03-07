@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import numpy as np
 import requests
 import pandas as pd
@@ -6,6 +6,7 @@ from bokeh.plotting import figure, save, output_file, vplot
 
 app = Flask(__name__)
 app.vars = {}
+app.secret_key = '\t\xf7\xcc\xd1ah\xb0q*\x97\x0b\xd2pn)\x0b\xd9\xd34]R\x8c\x0b\xa5'
 
 @app.route('/')
 def main():
@@ -41,13 +42,13 @@ def tickersubmit():
   if request.method == 'GET':
     return render_template('tickerplot_input.html')
   else:
-    app.vars['tickersymbol'] = request.form['ticker_name']
+    session['tickersymbol'] = request.form['ticker_name']
     return redirect('/tickerplot')
     #return app.vars['tickersymbol']
 
 @app.route('/tickerplot')
 def tickerplot():
-  symbol = app.vars['tickersymbol']
+  symbol = session.get('tickersymbol',None)
   # symbol = 'FB'
   field = u'Open'
   r = requests.get('https://www.quandl.com/api/v3/datasets/WIKI/{}.json'.format(symbol))
@@ -76,4 +77,4 @@ def tickerplot():
     return file.read()
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0',debug=True)
+  app.run(host='0.0.0.0')
