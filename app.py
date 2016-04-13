@@ -10,71 +10,15 @@ app.secret_key = '\t\xf7\xcc\xd1ah\xb0q*\x97\x0b\xd2pn)\x0b\xd9\xd34]R\x8c\x0b\x
 
 @app.route('/')
 def main():
-  return redirect('/tickersubmit')
+  return redirect('/index')
 
 @app.route('/index')
 def index():
   return render_template('index.html')
 
-@app.route('/nprand')
-def nprand():
-  return str(np.random.rand())
-
-@app.route('/index_lulu',methods=['GET','POST'])
-def index_lulu():
-    nquestions=5
-    if request.method == 'GET':
-        return render_template('userinfo_lulu.html',num=nquestions)
-    else:
-        #request was a POST
-        app.vars['name'] = request.form['name_lulu']
-        app.vars['age'] = request.form['age_lulu']
-
-        f = open('%s_%s.txt'%(app.vars['name'],app.vars['age']),'w')
-        f.write('Name: %s\n'%(app.vars['name']))
-        f.write('Age: %s\n\n'%(app.vars['age']))
-        f.close()
-
-        return 'request.method was not a GET!'
-
-@app.route('/tickersubmit',methods=['GET','POST'])
-def tickersubmit():
-  if request.method == 'GET':
-    return render_template('tickerplot_input.html')
-  else:
-    session['tickersymbol'] = request.form['ticker_name']
-    return redirect('/tickerplot')
-    #return app.vars['tickersymbol']
-
-@app.route('/tickerplot')
-def tickerplot():
-  symbol = session.get('tickersymbol',None)
-  # symbol = 'FB'
-  field = u'Open'
-  r = requests.get('https://www.quandl.com/api/v3/datasets/WIKI/{}.json'.format(symbol))
-  rjson = r.json()
-  if rjson.has_key('dataset'):
-      dataset = r.json()['dataset']
-  else:
-      print 'Error retrieving Quandl data. That may not be a valid stock ticker symbol.'
-
-  df = pd.DataFrame(dataset['data'],columns=dataset['column_names'])
-  items = 30
-
-  #return '\n'.join(df['Adj. Open'][0:30].astype(str))
-  p1 = figure(x_axis_type = "datetime")
-  p1.title = "Stock Opening Prices"
-  p1.grid.grid_line_alpha=0.3
-  p1.xaxis.axis_label = 'Date'
-  p1.yaxis.axis_label = 'Price'
-
-  p1.line(np.array(df['Date'],dtype=np.datetime64), df['Adj. Open'], color='#A6CEE3', legend=symbol)
-
-  output_file("templates/stocks.html", title="readstockprice.py example")
-  save(vplot(p1)) 
-  #return render_template('stocks.html')
-  with open('templates/stocks.html') as file:
-    return file.read()
+@app.route('/elfarolitosimilarities')
+def similarities():
+  return render_template('elfarolitosimilarities.html')
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+  app.run(debug=False,host='0.0.0.0')
